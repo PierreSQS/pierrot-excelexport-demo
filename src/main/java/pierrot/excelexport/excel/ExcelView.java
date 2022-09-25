@@ -12,11 +12,11 @@ import java.io.InputStream;
 import java.util.Map;
 
 @Component
-public class ExcelBuilder extends AbstractXlsxView {
+public class ExcelView extends AbstractXlsxView {
 
     private final ResourceLoader resourceLoader;
 
-    public ExcelBuilder(ResourceLoader resourceLoader) {
+    public ExcelView(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
 

@@ -4,15 +4,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import pierrot.excelexport.excel.ExcelBuilder;
+import pierrot.excelexport.excel.ExcelView;
 
 @Controller
 @RequestMapping("excel/download")
 public class ExcelExportController {
 
-    private final ExcelBuilder excelBuilder;
+    private final ExcelView excelBuilder;
 
-    public ExcelExportController(ExcelBuilder excelBuilder) {
+    public ExcelExportController(ExcelView excelBuilder) {
         this.excelBuilder = excelBuilder;
     }
 
