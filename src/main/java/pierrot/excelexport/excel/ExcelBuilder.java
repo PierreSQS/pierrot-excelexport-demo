@@ -7,6 +7,8 @@ import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 @Component
@@ -20,7 +22,12 @@ public class ExcelBuilder extends AbstractXlsxView {
 
     @Override
     protected Workbook createWorkbook(Map<String, Object> model, HttpServletRequest request) {
-
+        try {
+            InputStream inputStream = resourceLoader
+                    .getResource("templates/excel/Einsatzplan KW 52 Download.xlsx").getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return super.createWorkbook(model, request);
     }
 
