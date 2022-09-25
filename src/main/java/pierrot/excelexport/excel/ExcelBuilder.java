@@ -24,7 +24,7 @@ public class ExcelBuilder extends AbstractXlsxView {
     protected Workbook createWorkbook(Map<String, Object> model, HttpServletRequest request) {
         try {
             InputStream inputStream = resourceLoader
-                    .getResource("templates/excel/Einsatzplan KW 52 Download.xlsx").getInputStream();
+                    .getResource("classpath:templates/excel/Einsatzplan KW 52 Download.xlsx").getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
