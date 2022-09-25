@@ -1,9 +1,13 @@
 package pierrot.excelexport.excel;
 
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
+import pierrot.excelexport.exception.ExcelTemplateNotReadException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +17,9 @@ import java.util.Map;
 
 @Component
 public class ExcelView extends AbstractXlsxView {
+    private static final String EXCEL_TEMPLATE = "templates/excel/Excel_Template.xlsx";
+
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(ExcelView.class);
 
     private final ResourceLoader resourceLoader;
 
@@ -22,12 +29,24 @@ public class ExcelView extends AbstractXlsxView {
 
     @Override
     protected Workbook createWorkbook(Map<String, Object> model, HttpServletRequest request) {
-        try {
-            InputStream inputStream = resourceLoader
-                    .getResource("classpath:templates/excel/Einsatzplan KW 52 Download.xlsx").getInputStream();
+        log.debug("the resource loader canonical: {}",resourceLoader.getClass().getCanonicalName());
+
+        Resource resource = resourceLoader.getResource("classpath:"+EXCEL_TEMPLATE);
+
+        XSSFWorkbook xssfWorkbook;
+
+        log.info("########### loading the Excel Template {} ###########",EXCEL_TEMPLATE);
+
+        try(InputStream inputStream = resource.getInputStream()) {
+            xssfWorkbook = new XSSFWorkbook(inputStream);
+            log.info("---------- create XSSFWorkbook from excel template {} !!!! ---------- ", resource.getFilename());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("********* Error by reading the Excel Template !!!! ********** ");
+            throw new ExcelTemplateNotReadException(e.getMessage());
         }
+
+        log.info("########### filling the Excel-Template {} ###########", resource.getFilename());
+
         return super.createWorkbook(model, request);
     }
 
