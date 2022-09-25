@@ -47,12 +47,13 @@ public class ExcelView extends AbstractXlsxView {
 
         log.info("########### filling the Excel-Template {} ###########", resource.getFilename());
 
-        return super.createWorkbook(model, request);
+        return xssfWorkbook;
     }
 
     @Override
     protected void buildExcelDocument(Map<String, Object> model, Workbook workbook,
                                       HttpServletRequest request, HttpServletResponse response) throws Exception {
+        response.addHeader("Content-Disposition", "attachment;fileName=InvoiceData.xlsx");
 
     }
 
