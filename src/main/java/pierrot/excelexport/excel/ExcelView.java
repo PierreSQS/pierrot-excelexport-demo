@@ -18,6 +18,8 @@ import java.util.Map;
 @Component
 public class ExcelView extends AbstractXlsxView {
     private static final String EXCEL_TEMPLATE = "templates/excel/Excel_Template.xlsx";
+    private static final String FILE_URL =
+            " file:/target/excel-export-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/templates/excel/Excel_Template.xlsx";
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ExcelView.class);
 
@@ -37,9 +39,11 @@ public class ExcelView extends AbstractXlsxView {
 
         log.info("########### loading the Excel Template {} ###########",EXCEL_TEMPLATE);
 
-        try(InputStream inputStream = resource.getInputStream()) {
+        try(InputStream inputStream = resource.getClass().getClassLoader().getResourceAsStream(FILE_URL)) {
             log.info("########### loading the Excel Template {} ###########",
                     resource.getFile().getPath());
+            log.info("########### the Excel Template URL {} ###########",resource.getURL());
+
             xssfWorkbook = new XSSFWorkbook(inputStream);
             log.info("---------- create XSSFWorkbook from excel template {} !!!! ---------- ",
                     resource.getFilename());
