@@ -3,8 +3,8 @@ package pierrot.excelexport.excel;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 import pierrot.excelexport.exception.ExcelTemplateNotReadException;
@@ -21,17 +21,15 @@ public class ExcelView extends AbstractXlsxView {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ExcelView.class);
 
-    private final ResourceLoader resourceLoader;
+    private Resource resource;
 
-    public ExcelView(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
+    public ExcelView() {
+        this.resource = new ClassPathResource(EXCEL_TEMPLATE);
     }
 
     @Override
     protected Workbook createWorkbook(Map<String, Object> model, HttpServletRequest request) {
-        log.debug("the resource loader canonical: {}",resourceLoader.getClass().getCanonicalName());
 
-        Resource resource = resourceLoader.getResource("classpath:"+EXCEL_TEMPLATE);
         log.debug("the resource canonical: {}",resource.getClass().getCanonicalName());
 
 
@@ -40,8 +38,11 @@ public class ExcelView extends AbstractXlsxView {
         log.info("########### loading the Excel Template {} ###########",EXCEL_TEMPLATE);
 
         try(InputStream inputStream = resource.getInputStream()) {
+            log.info("########### loading the Excel Template {} ###########",
+                    resource.getFile().getPath());
             xssfWorkbook = new XSSFWorkbook(inputStream);
-            log.info("---------- create XSSFWorkbook from excel template {} !!!! ---------- ", resource.getFilename());
+            log.info("---------- create XSSFWorkbook from excel template {} !!!! ---------- ",
+                    resource.getFilename());
         } catch (IOException e) {
             log.error("********* Error by reading the Excel Template !!!! ********** ");
             throw new ExcelTemplateNotReadException(e.getMessage());
