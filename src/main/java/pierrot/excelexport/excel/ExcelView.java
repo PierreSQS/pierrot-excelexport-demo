@@ -32,6 +32,8 @@ public class ExcelView extends AbstractXlsxView {
         log.debug("the resource loader canonical: {}",resourceLoader.getClass().getCanonicalName());
 
         Resource resource = resourceLoader.getResource("classpath:"+EXCEL_TEMPLATE);
+        log.debug("the resource canonical: {}",resource.getClass().getCanonicalName());
+
 
         XSSFWorkbook xssfWorkbook;
 
